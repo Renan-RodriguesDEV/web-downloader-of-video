@@ -39,3 +39,20 @@ if st.button("Buscar"):
             st.rerun()
     else:
         st.error("Ocorreu um erro ao baixar o video.")
+footer = """
+<style>
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+}
+</style>
+<div class="footer">
+    <p>Feito por <a href="https://www.instagram.com/__little_renan__.py/">@__little_renan__.py</a> 📸<br>
+    Pix: (19) 99872-2472 💸, Renan Rodrigues - BCO Santander (SA)</p>
+</div>
+"""
+st.markdown(footer, unsafe_allow_html=True)
