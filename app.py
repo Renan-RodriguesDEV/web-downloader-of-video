@@ -21,7 +21,7 @@ if st.button("Buscar"):
                     download = st.download_button(
                         "Baixar video", data=v.read(), file_name="download.mp4"
                     )
-                    cont = 0
+                cont = 0
                 placeholder = st.empty()
                 while cont <= 300:
                     if download:
