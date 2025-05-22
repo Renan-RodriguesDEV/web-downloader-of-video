@@ -16,9 +16,10 @@ def baixar_com_ytdlp(url, pasta_destino=PATH_DOWNLOADS):
     Baixa vídeo usando yt-dlp - mais robusto e frequentemente atualizado
     """
     opcoes = {
-        "format": "best",  # Melhor qualidade disponível
+        "format": "bestvideo+bestaudio/best",  # Melhor qualidade disponível
         "outtmpl": f"{pasta_destino}/%(title)s.%(ext)s",
         "ignoreerrors": True,
+        "nocheckcertificate": True,  # Ignorar erros de certificado
     }
 
     with YoutubeDL(opcoes) as ydl:

@@ -4,12 +4,10 @@ import streamlit as st
 from src.downloader import PATH_DOWNLOADS, baixar_com_ytdlp
 
 st.set_page_config(initial_sidebar_state="collapsed")
-for f in os.listdir(PATH_DOWNLOADS):
-    os.remove(f"{PATH_DOWNLOADS}/{f}")
-    print("[INFO] pasta de downloas limpa!! [INFO]")
-st.title("Pagina para dowloads de videos via link(s)!!!")
+
+st.title("Bem vindo ao Downloader, forneca a url do video!!!")
 url_video = st.text_input(
-    "insira a URL referente ao video", placeholder="http://www.youtube.com/watch"
+    "insira a URL referente ao video", placeholder="https://www.youtube.com/watch"
 )
 if st.button("Buscar"):
     result = baixar_com_ytdlp(url_video)
@@ -25,15 +23,17 @@ if st.button("Buscar"):
                     )
                     cont = 0
                 placeholder = st.empty()
-                while cont <= 120:
+                while cont <= 300:
                     if download:
                         break
                     placeholder.warning(
-                        f"Tempo de download disponível: {120-cont} segundos"
+                        f"Tempo de download disponível: {300-cont} segundos"
                     )
                     cont += 1
                     time.sleep(1)
-            # os.remove(f"{PATH_DOWNLOADS}/{arq}")
+            # limpando a pasta de downloads do servidor
+            print(f"[INFO] - {time.strftime('%X')} - Removendo arquivo {arq} [INFO]")
+            os.remove(f"{PATH_DOWNLOADS}/{arq}")
             st.subheader("Tempo esgotado, forneca a url novamente")
             time.sleep(5)
             st.rerun()
@@ -51,8 +51,7 @@ footer = """
 }
 </style>
 <div class="footer">
-    <p>Feito por <a href="https://www.instagram.com/__little_renan__.py/">@__little_renan__.py</a> 📸<br>
-    Pix: (19) 99872-2472 💸, Renan Rodrigues - BCO Santander (SA)</p>
+    <p>Segue no insta lá pae <a href="https://www.instagram.com/__little_renan__.py/">@__little_renan__.py</a> 📸<br>
 </div>
 """
 st.markdown(footer, unsafe_allow_html=True)
