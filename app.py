@@ -3,6 +3,11 @@ import time
 import streamlit as st
 from src.downloader import PATH_DOWNLOADS, baixar_com_ytdlp
 
+# Limpa todos os arquivos .mp4 da pasta de downloads ao iniciar o app
+for arq in os.listdir(PATH_DOWNLOADS):
+    if arq.endswith(".mp4"):
+        os.remove(os.path.join(PATH_DOWNLOADS, arq))
+
 st.set_page_config(initial_sidebar_state="collapsed")
 
 st.title("Bem vindo ao Downloader, forneca a url do video!!!")
