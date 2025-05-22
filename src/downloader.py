@@ -15,10 +15,7 @@ def baixar_com_ytdlp(url, pasta_destino=PATH_DOWNLOADS):
     """
     Baixa vídeo usando yt-dlp - mais robusto e frequentemente atualizado
     """
-    # Limpa todos os arquivos .mp4 da pasta de downloads ao iniciar o app
-    for arq in os.listdir(PATH_DOWNLOADS):
-        if arq.endswith(".mp4"):
-            os.remove(os.path.join(PATH_DOWNLOADS, arq))
+
     opcoes = {
         "format": "bestvideo+bestaudio/best",  # Melhor qualidade disponível
         "outtmpl": f"{pasta_destino}/%(title)s.%(ext)s",
