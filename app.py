@@ -4,9 +4,10 @@ import streamlit as st
 from src.downloader import PATH_DOWNLOADS, baixar_com_ytdlp
 
 # Limpa todos os arquivos .mp4 da pasta de downloads ao iniciar o app
-for arq in os.listdir(PATH_DOWNLOADS):
-    os.remove(os.path.join(PATH_DOWNLOADS, arq))
-    print(f'[INFO] - {time.strftime("%X")} - Removendo arquivo {arq} [INFO]')
+if os.path.exists(PATH_DOWNLOADS):
+    for arq in os.listdir(PATH_DOWNLOADS):
+        os.remove(os.path.join(PATH_DOWNLOADS, arq))
+        print(f'[INFO] - {time.strftime("%X")} - Removendo arquivo {arq} [INFO]')
 
 st.set_page_config(initial_sidebar_state="collapsed")
 
@@ -25,13 +26,15 @@ if st.button("Buscar"):
             arquivos = os.listdir(PATH_DOWNLOADS)
             for arq in arquivos:
                 if arq.endswith(".mp4"):
-                    with open(f"{PATH_DOWNLOADS}/{arq}", "rb") as v:
-                        st.video(v.read())
+                    video_path = f"{PATH_DOWNLOADS}/{arq}"
+                    with open(video_path, "rb") as v:
+                        video_bytes = v.read()
+                        st.video(video_bytes)
                         # Inicializa download como False
                         download = False
                         # Botão de download
                         download = st.download_button(
-                            "Baixar video", data=v.read(), file_name="download.mp4"
+                            "Baixar video", data=video_bytes, file_name="download.mp4"
                         )
                         cont = 0
                         placeholder = st.empty()
@@ -43,11 +46,18 @@ if st.button("Buscar"):
                             )
                             cont += 1
                             time.sleep(1)
-                    # limpando a pasta de downloads do servidor
-                    print(
-                        f"[INFO] - {time.strftime('%X')} - Removendo arquivo {arq} [INFO]"
-                    )
-                    os.remove(f"{PATH_DOWNLOADS}/{arq}")
+                    # Agora, fora do bloco with, o arquivo está fechado e pode ser removido
+            if not download:
+                if os.path.exists(video_path):
+                    try:
+                        os.remove(video_path)
+                        print(
+                            f"[INFO] - {time.strftime('%X')} - Removendo arquivo {arq} [INFO]"
+                        )
+                    except Exception as e:
+                        st.warning(
+                            f"Não foi possível remover o arquivo {arq}, ele está em uso."
+                        )
                     st.subheader("Tempo esgotado, forneca a url novamente")
                     time.sleep(5)
                     st.rerun()
