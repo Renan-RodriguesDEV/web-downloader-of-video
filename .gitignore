@@ -4,3 +4,6 @@
 **.MP4
 __pycache__
 .devcontainer
+.env
+test*
+.pytest*

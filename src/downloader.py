@@ -1,50 +1,46 @@
-# Método 1: usando yt-dlp (Recomendado)
+"""
+Downloader media Youtube
+:url https://youtu.be/WVlkk2rXn2Y?si=U9Ee1lDVfKRHPqA9
+"""
+
 import os
-from yt_dlp import YoutubeDL
-from moviepy import VideoFileClip
 
-PATH_DOWNLOADS = os.path.join(os.getcwd(), "downloads")
+import requests
+from dotenv import load_dotenv
 
+from src.http_exception import HttpException
 
-if not os.path.exists(PATH_DOWNLOADS):
-    print("[INFO] Downloads not exists, creating folder... [INFO]")
-    os.makedirs(PATH_DOWNLOADS)
+load_dotenv()
 
 
-def baixar_com_ytdlp(url, pasta_destino=PATH_DOWNLOADS):
-    """
-    Baixa vídeo usando yt-dlp - mais robusto e frequentemente atualizado
-    """
-
-    opcoes = {
-        "format": "bestvideo+bestaudio/best",  # Melhor qualidade disponível
-        "outtmpl": f"{pasta_destino}/%(title)s.%(ext)s",
-        "ignoreerrors": True,
-        "nocheckcertificate": True,  # Ignorar erros de certificado
+def get_url_download(link_video: str):
+    url = "https://youtube-media-downloader.p.rapidapi.com/v2/video/details"
+    link_video = link_video.split("?")[0].split("/")[3]
+    querystring = {
+        "videoId": link_video,
+        "urlAccess": "normal",
+        "videos": "auto",
+        "audios": "auto",
     }
 
-    with YoutubeDL(opcoes) as ydl:
-        try:
-            ydl.download([url])
-            return True
-        except Exception as e:
-            print(f"Erro: {str(e)}")
-            return False
+    headers = {
+        "x-rapidapi-key": os.getenv("RAPIDAPI_KEY"),
+        "x-rapidapi-host": "youtube-media-downloader.p.rapidapi.com",
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+    if response.status_code != 200:
+        raise HttpException(
+            "Error fetching video details",
+            response.status_code,
+            response.json(),
+        )
+    print(response.json())
+    return response.json()["audios"]["items"][0]["url"]
 
 
-def converter_para_mp3(filename_video, base_folder=PATH_DOWNLOADS):
-    try:
-        audio = VideoFileClip(os.path.join(base_folder, filename_video)).audio
-        audio.write_audiofile(f"{base_folder}/{filename_video.replace('.mp4','')}.mp3")
-        return True
-    except Exception as e:
-        print(str(e))
-        return False
-
-
-if __name__ == "__main__":
-    # link = "https://youtu.be/23HFxAPyJ9U?si=Qsb9rxXOFIVaydxl"
-    # baixar_com_ytdlp(link)
-    for video in os.listdir("downloads"):
-        if video.endswith(".mp4"):
-            converter_para_mp3(video)
+def download(link_video: str, filename: str = "audio.mp3"):
+    url_download = get_url_download(link_video)
+    content = requests.get(url_download)
+    with open(filename, "wb") as f:
+        f.write(content.content)
