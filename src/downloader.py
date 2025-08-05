@@ -41,6 +41,5 @@ def get_url_download(link_video: str):
 
 def download(link_video: str, filename: str = "audio.mp3"):
     url_download = get_url_download(link_video)
-    content = requests.get(url_download)
-    with open(filename, "wb") as f:
-        f.write(content.content)
+    response = requests.get(url_download)
+    return response.content
