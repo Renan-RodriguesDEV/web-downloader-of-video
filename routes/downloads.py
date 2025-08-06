@@ -15,7 +15,8 @@ def downloads():
         music_data = download(url)
         # converte o áudio para o formato desejado
         music_file = BytesIO(music_data)
-        print(f"File converted to BytesIO: {music_file}")
+        music_file.seek(0)
+        print(f"File converted to BytesIO: {music_file.getbuffer().nbytes} bytes")
         print(f"Downloading audio from {url} as {filename}.mp3")
         return send_file(
             music_file,
