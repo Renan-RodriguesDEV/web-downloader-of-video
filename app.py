@@ -1,8 +1,10 @@
 from flask import Flask, render_template
+from flask_cors import CORS
 
 from routes.downloads import route as downloads_route
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(downloads_route)
 
 
