@@ -42,4 +42,7 @@ def get_url_download(link_video: str):
 def download(link_video: str, filename: str = "audio.mp3"):
     url_download = get_url_download(link_video)
     response = requests.get(url_download)
+    print("Status code:", response.status_code)
+    print("Download URL:", url_download)
+    print("Content length:", len(response.content))
     return response.content
