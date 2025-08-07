@@ -62,12 +62,13 @@ def download(link_video: str, filename: str = "audio.mp3"):
     response = requests.get(url_download, headers=headers, allow_redirects=True)
     if response.status_code != 200:
         print("Failed to download audio")
-        print("Response:", response.json())
+        print("Response:", response.text)
         try:
             raise HttpException(
-                "Error downloading audio", response.status_code, response.json()
+                "Error downloading audio", response.status_code, response.text
             )
         except Exception as e:
+            print("Error details:", str(e))
             raise HttpException(
                 "Error fetching video details",
                 response.status_code,
