@@ -41,7 +41,16 @@ def get_url_download(link_video: str):
 
 def download(link_video: str, filename: str = "audio.mp3"):
     url_download = get_url_download(link_video)
-    response = requests.get(url_download)
+    # Adicionar headers para simular um navegador
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Accept": "*/*",
+        "Accept-Language": "en-US,en;q=0.5",
+        "DNT": "1",
+        "Connection": "keep-alive",
+        "Referer": "https://www.youtube.com/",
+    }
+    response = requests.get(url_download, headers=headers)
     print("Status code:", response.status_code)
     print("Download URL:", url_download)
     print("Content length:", len(response.content))
