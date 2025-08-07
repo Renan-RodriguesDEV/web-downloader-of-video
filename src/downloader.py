@@ -52,7 +52,13 @@ def download(link_video: str, filename: str = "audio.mp3"):
         "DNT": "1",  # Do Not Track
     }
 
-    response = requests.get(url_download, headers=headers)
+    response = requests.get(url_download, headers=headers, allow_redirects=True)
+    if response.status_code != 200:
+        print("Failed to download audio")
+        print("Response:", response.json())
+        raise HttpException(
+            "Error downloading audio", response.status_code, response.json()
+        )
     print("Status code:", response.status_code)
     print("Download URL:", url_download)
     print("Content length:", len(response.content))
