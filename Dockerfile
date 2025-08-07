@@ -14,6 +14,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copia o restante dos arquivos do projeto para o container
 COPY . .
 
+# Configuração para garantir que não haja timeout nas requisições
+ENV PYTHONUNBUFFERED=1
+ENV FLASK_APP=app.py
+ENV GUNICORN_CMD_ARGS="--timeout 120 --workers 2"
+
 # Expondo a porta 5000, que é a porta padrão do Flask
 EXPOSE 5000
 
