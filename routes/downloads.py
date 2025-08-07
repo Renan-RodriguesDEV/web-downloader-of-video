@@ -2,8 +2,8 @@ from io import BytesIO
 
 from flask import Blueprint, make_response, render_template, request, send_file
 
-from http_exception import HttpException
 from src.downloader import download
+from src.http_exception import HttpException
 
 route = Blueprint("downloads", __name__)
 
