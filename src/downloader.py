@@ -30,11 +30,18 @@ def get_url_download(link_video: str):
 
     response = requests.get(url, headers=headers, params=querystring)
     if response.status_code != 200:
-        raise HttpException(
-            "Error fetching video details",
-            response.status_code,
-            response.json(),
-        )
+        try:
+            raise HttpException(
+                "Error fetching video details",
+                response.status_code,
+                response.json(),
+            )
+        except Exception as e:
+            raise HttpException(
+                "Error fetching video details",
+                response.status_code,
+                str(e),
+            )
     print(response.json())
     return response.json()["audios"]["items"][0]["url"]
 
@@ -56,9 +63,16 @@ def download(link_video: str, filename: str = "audio.mp3"):
     if response.status_code != 200:
         print("Failed to download audio")
         print("Response:", response.json())
-        raise HttpException(
-            "Error downloading audio", response.status_code, response.json()
-        )
+        try:
+            raise HttpException(
+                "Error downloading audio", response.status_code, response.json()
+            )
+        except Exception as e:
+            raise HttpException(
+                "Error fetching video details",
+                response.status_code,
+                str(e),
+            )
     print("Status code:", response.status_code)
     print("Download URL:", url_download)
     print("Content length:", len(response.content))
