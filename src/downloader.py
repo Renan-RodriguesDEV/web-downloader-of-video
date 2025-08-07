@@ -44,12 +44,12 @@ def download(link_video: str, filename: str = "audio.mp3"):
     # Adicionar headers para simular um navegador
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "Accept": "application/json",
+        "Accept": "audio/mp4",  # Ajuste o tipo de conteúdo se necessário
         "Accept-Encoding": "gzip, deflate, br",
         "Connection": "keep-alive",
         "Referer": "https://www.youtube.com/",
-        "Cache-Control": "no-cache",
-        "Pragma": "no-cache",
+        "Origin": "https://www.youtube.com",  # Tente adicionar o Origin também
+        "DNT": "1",  # Do Not Track
     }
 
     response = requests.get(url_download, headers=headers)
